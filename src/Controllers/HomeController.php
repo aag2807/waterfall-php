@@ -5,7 +5,7 @@ namespace Waterfall\Controllers;
 use Waterfall\Utils\Decorators\Controller;
 use Waterfall\Utils\Decorators\Get;
 
-#[Controller("home")]
+#[Controller("/home")]
 class HomeController {
 
 

@@ -8,9 +8,11 @@ use Attribute;
 final readonly class Get
 {
   public string $route;
+  public string $verb;
 
   public function __construct(string $route)
   {
     $this->route = $route;
+    $this->verb = "GET";
   }
 }

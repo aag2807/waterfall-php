@@ -41,7 +41,7 @@ final class ControllerRegistry
            * @var Get|Post|Patch|Put|Delete
            */
           $route = $attribute->newInstance();
-          var_dump($route->route);
+          RouterConfig::registerRoute($route->verb, $controller_route, $route->route, $method);
         }
       }
     }

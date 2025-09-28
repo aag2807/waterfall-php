@@ -6,6 +6,11 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
 use Waterfall\Utils\Decorators\Controller;
+use Waterfall\Utils\Decorators\Delete;
+use Waterfall\Utils\Decorators\Get;
+use Waterfall\Utils\Decorators\Patch;
+use Waterfall\Utils\Decorators\Post;
+use Waterfall\Utils\Decorators\Put;
 
 final class ControllerRegistry
 {
@@ -21,8 +26,23 @@ final class ControllerRegistry
       $reflection = new ReflectionClass($className);
       $attributes = $reflection->getAttributes(Controller::class);
 
-      if (!empty($attributes)) {
-        $attributes[0]->newInstance();
+      /**
+       * @var Controller
+       */
+      $controller_attribute = $attributes[0]->newInstance();
+      $controller_route = $controller_attribute->routeBase;
+
+      $methods = $reflection->getMethods();
+      foreach ($methods as $method) {
+
+        $methodAttributes = $method->getAttributes();
+        foreach ($methodAttributes as $attribute) {
+          /**
+           * @var Get|Post|Patch|Put|Delete
+           */
+          $route = $attribute->newInstance();
+          var_dump($route->route);
+        }
       }
     }
   }

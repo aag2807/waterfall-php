@@ -28,7 +28,13 @@ final class RouterConfig
     /**
      * @var ReflectionMethod
      */
-    $cb = static::$routes[$method][$route];
+    $cb = static::$routes[$method][$route] ?? null;
+
+    if ($cb === null) {
+      http_response_code(404);
+      echo json_encode(["error" => "404 not found"]);
+      return;
+    }
 
     $controllerClass = $cb->getDeclaringClass()->getName();
     $controllerInstance = new $controllerClass();

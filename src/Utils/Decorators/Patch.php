@@ -3,16 +3,19 @@
 namespace Waterfall\Utils\Decorators;
 
 use Attribute;
+use Waterfall\Utils\Enums\ReturnType;
 
 #[Attribute(Attribute::TARGET_METHOD)]
 final readonly class Patch
 {
   public string $route;
   public string $verb;
+  public ReturnType $returnType;
 
-  public function __construct(string $route)
+  public function __construct(string $route, ReturnType $returnType = ReturnType::JSON)
   {
     $this->route = $route;
     $this->verb = "PATCH";
+    $this->returnType = $returnType;
   }
 }

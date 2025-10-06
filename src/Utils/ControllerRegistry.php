@@ -11,6 +11,7 @@ use Waterfall\Utils\Decorators\Get;
 use Waterfall\Utils\Decorators\Patch;
 use Waterfall\Utils\Decorators\Post;
 use Waterfall\Utils\Decorators\Put;
+use Waterfall\Utils\Enums\ReturnType;
 
 final class ControllerRegistry
 {
@@ -42,6 +43,15 @@ final class ControllerRegistry
            */
           $route = $attribute->newInstance();
           RouterConfig::registerRoute($route->verb, $controller_route, $route->route, $method);
+          $is_json_header = $route->returnType == ReturnType::JSON;
+          if ($is_json_header) {
+            header('Content-Type: application/json');
+          }
+
+          $is_html_header = $route->returnType == ReturnType::HTML;
+          if ($is_html_header) {
+            header('Content-Type: text/html; charset=utf-8');
+          }
         }
       }
     }
@@ -55,6 +65,9 @@ final class ControllerRegistry
     $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($controllers_directory));
 
     foreach ($iterator as $file) {
+      if ($file->isDir()) {
+        continue;
+      }
       $content = file_get_contents($file->getPathname());
 
       $namespace = '';
